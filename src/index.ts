@@ -38,7 +38,7 @@ app.get('*', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`🏥 Doctor Prescription Server running on http://localhost:${PORT}`);
+    console.log(`Doctor Prescription Server running on http://localhost:${PORT}`);
 });
 
 export default app;

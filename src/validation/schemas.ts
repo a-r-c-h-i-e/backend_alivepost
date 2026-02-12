@@ -10,7 +10,7 @@ export const loginSchema = z.object({
     password: z
         .string()
         .min(6, 'Password must be at least 6 characters')
-        .max(100, 'Password must be at most 100 characters'),
+        .max(50, 'Password must be at most 50 characters'),
 });
 
 export const registerSchema = z.object({
@@ -27,9 +27,16 @@ export const registerSchema = z.object({
         .string()
         .min(2, 'Name must be at least 2 characters')
         .max(100, 'Name must be at most 100 characters'),
-});
-
-// Medicine validation schemas
+    type: z
+        .string()
+        .max(100, 'type must be at most 100 characters'),
+    mobileNumber: z
+        .number()  // Changed from z.Number() to z.number()
+        .int('Mobile number must be an integer')
+        .refine((val) => val.toString().length === 10, {
+            message: 'Mobile number must be exactly 10 digits'
+        }),
+});// Medicine validation schemas
 export const medicineSearchSchema = z.object({
     query: z
         .string()
@@ -99,6 +106,16 @@ export const prescriptionCreateSchema = z.object({
         .string()
         .min(2, 'Patient name must be at least 2 characters')
         .max(100, 'Patient name must be at most 100 characters'),
+    patientMobileNumber: z
+        .number()
+        .int('Mobile number must be an integer')
+        .refine((val) => val.toString().length === 10, {
+            message: 'Mobile number must be exactly 10 digits'
+        }),
+    patientProblem: z
+        .string()
+        .min(1, 'Patient problem/condition is required')
+        .max(500, 'Problem description must be at most 500 characters'),
     medicineId: z
         .string()
         .min(1, 'Medicine ID is required'),
@@ -111,6 +128,7 @@ export const prescriptionCreateSchema = z.object({
         .max(500, 'Notes must be at most 500 characters')
         .optional(),
 });
+
 
 // Type exports
 export type LoginInput = z.infer<typeof loginSchema>;
