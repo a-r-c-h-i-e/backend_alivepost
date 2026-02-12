@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Prescription Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dashboard-page">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="12" fill="url(#gradient2)" />
+                <path d="M24 12V36M16 24H32" stroke="white" stroke-width="4" stroke-linecap="round" />
+                <defs>
+                    <linearGradient id="gradient2" x1="0" y1="0" x2="48" y2="48">
+                        <stop stop-color="#6366f1" />
+                        <stop offset="1" stop-color="#8b5cf6" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>Prescription Manager</span>
+        </div>
+        <div class="nav-user">
+            <span id="doctorName">Dr. John Smith</span>
+            <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="dashboard-grid">
+            <!-- Prescription Form -->
+            <div class="card prescription-form-card">
+                <div class="card-header">
+                    <h2>New Prescription</h2>
+                    <p>Fill in the details to create a prescription</p>
+                </div>
+
+                <form id="prescriptionForm">
+                    <!-- Patient Details -->
+                    <div class="form-section">
+                        <h3>Patient Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientId">Patient ID</label>
+                                <input type="text" id="patientId" placeholder="e.g., P001" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientName">Patient Name</label>
+                                <input type="text" id="patientName" placeholder="Enter patient name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medicine Selection -->
+                    <div class="form-section">
+                        <h3>Medicine</h3>
+                        <div class="form-group">
+                            <label for="medicineSearch">Search Medicine</label>
+                            <div class="search-container">
+                                <input type="text" id="medicineSearch" placeholder="Type to search medicines..."
+                                    autocomplete="off">
+                                <div id="medicineDropdown" class="dropdown" style="display: none;"></div>
+                            </div>
+                            <input type="hidden" id="selectedMedicineId">
+                        </div>
+                        <div id="selectedMedicine" class="selected-medicine" style="display: none;">
+                            <span class="medicine-name"></span>
+                            <span class="medicine-dosage"></span>
+                            <button type="button" class="remove-medicine">&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Timing Selection -->
+                    <div class="form-section">
+                        <h3>Dosage Timing</h3>
+                        <p class="section-hint">Select when the medicine should be taken</p>
+
+                        <div class="timing-options">
+                            <label class="timing-checkbox">
+                                <input type="checkbox" name="timing" value="MORNING">
+                                <span class="timing-card">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <line x1="12" y1="1" x2="12" y2="3" />
+                                        <line x1="12" y1="21" x2="12" y2="23" />
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                        <line x1="1" y1="12" x2="3" y2="12" />
+                                        <line x1="21" y1="12" x2="23" y2="12" />
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                    </svg>
+                                    <span>Morning</span>
+                                    <small>6:00 - 10:00 AM</small>
+                                </span>
+                            </label>
+
+                            <label class="timing-checkbox">
+                                <input type="checkbox" name="timing" value="AFTERNOON">
+                                <span class="timing-card">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <line x1="12" y1="1" x2="12" y2="3" />
+                                        <line x1="21" y1="12" x2="23" y2="12" />
+                                        <line x1="1" y1="12" x2="3" y2="12" />
+                                    </svg>
+                                    <span>Afternoon</span>
+                                    <small>12:00 - 3:00 PM</small>
+                                </span>
+                            </label>
+
+                            <label class="timing-checkbox">
+                                <input type="checkbox" name="timing" value="EVENING">
+                                <span class="timing-card">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                    </svg>
+                                    <span>Evening</span>
+                                    <small>6:00 - 9:00 PM</small>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Custom Times -->
+                        <div class="custom-times-section">
+                            <div class="custom-times-header">
+                                <h4>Custom Times</h4>
+                                <button type="button" id="addCustomTime" class="btn btn-small btn-outline">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <line x1="8" y1="2" x2="8" y2="14" />
+                                        <line x1="2" y1="8" x2="14" y2="8" />
+                                    </svg>
+                                    Add Time
+                                </button>
+                            </div>
+                            <div id="customTimesList" class="custom-times-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="notes">Additional Notes (Optional)</label>
+                            <textarea id="notes" rows="3" placeholder="Any special instructions..."></textarea>
+                        </div>
+                    </div>
+
+                    <div id="formError" class="error-message" style="display: none;"></div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="9 11 12 14 22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                        Submit Prescription
+                    </button>
+                </form>
+            </div>
+
+            <!-- Recent Prescriptions -->
+            <div class="card prescriptions-list-card">
+                <div class="card-header">
+                    <h2>Recent Prescriptions</h2>
+                    <button id="refreshPrescriptions" class="btn btn-small btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 4v6h6" />
+                            <path d="M15 12V6H9" />
+                            <path d="M13.51 5.5A6 6 0 0 0 3 5.5M2.49 10.5A6 6 0 0 0 13 10.5" />
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+                <div id="prescriptionsList" class="prescriptions-list">
+                    <div class="empty-state">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="6" y="6" width="36" height="36" rx="4" />
+                            <line x1="6" y1="18" x2="42" y2="18" />
+                            <line x1="18" y1="6" x2="18" y2="18" />
+                        </svg>
+                        <p>No prescriptions yet</p>
+                        <span>Create your first prescription using the form</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Toast -->
+    <div id="toast" class="toast" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 10 9 13 14 7" />
+            <circle cx="10" cy="10" r="9" />
+        </svg>
+        <span id="toastMessage">Prescription created successfully!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

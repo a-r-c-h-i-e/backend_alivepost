@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  name          String
+  type          String
+  mobileNumber  String         @unique
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  prescriptions Prescription[]
+
+  @@map("doctors")
+}
+
+model Patient {
+  id            String         @id @default(cuid())
+  patientId     String         @unique @map("patient_id")
+  name          String
+  mobileNumber  String         @unique
+  problem       String
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  prescriptions Prescription[]
+
+  @@map("patients")
+}
+
+model Medicine {
+  id            String         @id @default(cuid())
+  name          String
+  dosage        String // e.g., "100mg", "500mg", "10ml"
+  type          String // e.g., "tablet", "capsule", "syrup", "injection"
+  manufacturer  String?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  prescriptions Prescription[]
+
+  @@unique([name, dosage])
+  @@map("medicines")
+}
+
+model Prescription {
+  id         String               @id @default(cuid())
+  doctorId   String               @map("doctor_id")
+  patientId  String               @map("patient_id")
+  medicineId String               @map("medicine_id")
+  notes      String?
+  exersice   String?
+  createdAt  DateTime             @default(now()) @map("created_at")
+  updatedAt  DateTime             @updatedAt @map("updated_at")
+  doctor     Doctor               @relation(fields: [doctorId], references: [id])
+  patient    Patient              @relation(fields: [patientId], references: [id])
+  medicine   Medicine             @relation(fields: [medicineId], references: [id])
+  timings    PrescriptionTiming[]
+
+  @@map("prescriptions")
+}
+
+model PrescriptionTiming {
+  id             String       @id @default(cuid())
+  prescriptionId String       @map("prescription_id")
+  timingType     TimingType   @map("timing_type")
+  customTime     String?      @map("custom_time") // HH:MM format for custom times
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+  @@map("prescription_timings")
+}
+
+enum TimingType {
+  MORNING
+  AFTERNOON
+  EVENING
+  CUSTOM
+}
