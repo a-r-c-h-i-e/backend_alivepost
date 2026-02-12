@@ -149,5 +149,48 @@ router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response) =>
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+router.get("/patient/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const prescriptions = await prisma.prescription.findMany({
+      where: {
+        patientId: id
+      },
+      include: {
+        patient: {
+          select: {
+            id: true,
+            name: true,
+            patientId: true
+          }
+        },
+        medicine: {
+          select: {
+            id: true,
+            name: true,
+            dosage: true,
+            type: true,
+            manufacturer: true
+          }
+        },
+        timings: {
+          select: {
+            id: true,
+            timingType: true,
+            customTime: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
+    res.json(prescriptions);
+  } catch (error) {
+    console.error('Patient Prescription Error', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 export default router;
