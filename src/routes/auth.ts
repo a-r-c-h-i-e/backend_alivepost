@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { loginSchema, registerSchema } from '../validation/schemas';
 import { ZodError } from 'zod';
-
+import {RegisterInput} from '../validation/schemas'
 const router = Router();
 const prisma = new PrismaClient();
 
@@ -33,14 +33,11 @@ router.post('/login', async (req: Request, res: Response) => {
         const secret = process.env.JWT_SECRET || 'fallback-secret';
         const token = jwt.sign({ doctorId: doctor.id }, secret, { expiresIn: '24h' });
 
-        res.json({
-            token,
-            doctor: {
-                id: doctor.id,
-                email: doctor.email,
-                name: doctor.name,
-            },
-        });
+    res.cookie('token', token , {
+  httpOnly: true, // Prevents JavaScript access
+  secure: true,   // Ensures HTTPS
+  sameSite: 'strict' // Protects against CSRF
+});
     } catch (error) {
         if (error instanceof ZodError) {
             res.status(400).json({ error: 'Validation failed', details: error.errors });
@@ -55,10 +52,9 @@ router.post('/login', async (req: Request, res: Response) => {
 router.post('/register', async (req: Request, res: Response) => {
     try {
         const validatedData = registerSchema.parse(req.body);
-        const { email, password, name } = validatedData;
 
         const existingDoctor = await prisma.doctor.findUnique({
-            where: { email },
+            where: { email: validatedData.email },
         });
 
         if (existingDoctor) {
@@ -66,13 +62,15 @@ router.post('/register', async (req: Request, res: Response) => {
             return;
         }
 
-        const passwordHash = await bcrypt.hash(password, 10);
+        const passwordHash = await bcrypt.hash(validatedData.password, 10);
 
         const doctor = await prisma.doctor.create({
             data: {
-                email,
+                email: validatedData.email,
                 passwordHash,
-                name,
+                name: validatedData.name,
+                type: validatedData.type,
+                mobileNumber: validatedData.mobileNumber
             },
         });
 
