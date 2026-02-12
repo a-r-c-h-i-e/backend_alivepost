@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { prescriptionCreateSchema } from '../validation/schemas';
+import { prescriptionCreateSchema, PrescriptionCreateInput } from '../validation/schemas';
 import { ZodError } from 'zod';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 
@@ -8,10 +8,19 @@ const router = Router();
 const prisma = new PrismaClient();
 
 // Create a prescription
+
 router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
         const validatedData = prescriptionCreateSchema.parse(req.body);
-        const { patientId, patientName, medicineId, timings, notes } = validatedData;
+        const { 
+            patientId, 
+            patientName, 
+            patientMobileNumber,
+            patientProblem,
+            medicineId, 
+            timings, 
+            notes 
+        } = validatedData as PrescriptionCreateInput;
 
         // Find or create patient
         let patient = await prisma.patient.findUnique({
@@ -23,6 +32,8 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
                 data: {
                     patientId,
                     name: patientName,
+                    mobileNumber: patientMobileNumber,
+                    problem: patientProblem,
                 },
             });
         }
@@ -68,7 +79,6 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 // Get all prescriptions for the logged-in doctor
 router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
