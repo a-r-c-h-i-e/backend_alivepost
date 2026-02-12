@@ -15,8 +15,8 @@ model Doctor {
   email         String         @unique
   passwordHash  String         @map("password_hash")
   name          String
-  type          String
-  mobileNumber  String         @unique
+  type          String         @default("General")
+  mobileNumber  Int         @unique 
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
   prescriptions Prescription[]
@@ -28,7 +28,7 @@ model Patient {
   id            String         @id @default(cuid())
   patientId     String         @unique @map("patient_id")
   name          String
-  mobileNumber  String         @unique
+  mobileNumber  Int         @unique
   problem       String
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")

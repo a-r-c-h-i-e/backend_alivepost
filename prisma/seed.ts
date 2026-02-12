@@ -15,6 +15,8 @@ async function main() {
         create: {
             email: 'doctor@test.com',
             passwordHash,
+            mobileNumber: 7651998047,
+            type: 'General',
             name: 'Dr. John Smith',
         },
     });
