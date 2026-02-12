@@ -4,11 +4,11 @@ A Node.js TypeScript server for doctors to manage patient prescriptions with fle
 
 ## Features
 
-- 🔐 **Doctor Authentication** - JWT-based login/register with Zod validation
-- 💊 **Medicine Search** - Autocomplete search with debouncing (name, dosage, type)
-- 📝 **Prescription Management** - Create prescriptions with patient info and medicine
-- ⏰ **Flexible Timing** - Morning, Afternoon, Evening + custom precise times
-- 🗃️ **PostgreSQL + Prisma** - Type-safe database operations
+-  **Doctor Authentication** - JWT-based login/register with Zod validation
+-  **Medicine Search** - Autocomplete search with debouncing (name, dosage, type)
+-  **Prescription Management** - Create prescriptions with patient info and medicine
+-  **Flexible Timing** - Morning, Afternoon, Evening + custom precise times
+-  **PostgreSQL + Prisma** - Type-safe database operations
 
 ## Quick Start
 
