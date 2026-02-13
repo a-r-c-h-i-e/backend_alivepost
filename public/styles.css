@@ -1,5 +1,5 @@
-/* Base Styles & Variables */
-:root {
+/* Base Styles & Variables
+ * :root {
   --bg-primary: #0f0f23;
   --bg-secondary: #1a1a2e;
   --bg-card: #16213e;
@@ -21,6 +21,40 @@
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --transition: all 0.3s ease;
 }
+ */
+
+ /* Light Theme – Human / Professional */
+
+:root {
+  --bg-primary: #f6f7fb;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f3f8;
+
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+
+  --accent-primary: #2563eb;
+  --accent-secondary: #3b82f6;
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #d97706;
+
+  --border-color: #e5e7eb;
+
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+
+  --shadow-sm: 0 2px 4px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
+
+  --transition: all .25s ease;
+}
+
 
 * {
   margin: 0;
