@@ -12,17 +12,7 @@
 <body class="dashboard-page">
     <nav class="navbar">
         <div class="nav-brand">
-            <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="48" rx="12" fill="url(#gradient2)" />
-                <path d="M24 12V36M16 24H32" stroke="white" stroke-width="4" stroke-linecap="round" />
-                <defs>
-                    <linearGradient id="gradient2" x1="0" y1="0" x2="48" y2="48">
-                        <stop stop-color="#6366f1" />
-                        <stop offset="1" stop-color="#8b5cf6" />
-                    </linearGradient>
-                </defs>
-            </svg>
-            <span>Prescription Manager</span>
+            <img src="logo.svg" alt="Logo" style="width: 20%">
         </div>
         <div class="nav-user">
             <span id="doctorName">Dr. John Smith</span>
@@ -45,12 +35,19 @@
                         <h3>Patient Details</h3>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="patientId">Patient ID</label>
-                                <input type="text" id="patientId" placeholder="e.g., P001" required>
-                            </div>
-                            <div class="form-group">
                                 <label for="patientName">Patient Name</label>
                                 <input type="text" id="patientName" placeholder="Enter patient name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientMobile">Patient Mobile Number</label>
+                                <input type="tel" id="patientMobile" placeholder="10-digit mobile number"
+                                    pattern="[0-9]{10}" maxlength="10" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientProblem">Problem / Condition</label>
+                                <input type="text" id="patientProblem" placeholder="e.g., Fever, Cough" required>
                             </div>
                         </div>
                     </div>
@@ -171,11 +168,13 @@
                 <div class="card-header">
                     <h2>Recent Prescriptions</h2>
                     <button id="refreshPrescriptions" class="btn btn-small btn-outline">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M1 4v6h6" />
-                            <path d="M15 12V6H9" />
-                            <path d="M13.51 5.5A6 6 0 0 0 3 5.5M2.49 10.5A6 6 0 0 0 13 10.5" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-refresh-cw-icon lucide-refresh-cw">
+                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                            <path d="M21 3v5h-5" />
+                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                            <path d="M8 16H3v5" />
                         </svg>
                         Refresh
                     </button>

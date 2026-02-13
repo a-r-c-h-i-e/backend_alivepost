@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,64 +8,44 @@
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="login-page">
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
         <div class="logo">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="48" height="48" rx="12" fill="url(#gradient)" />
-            <path d="M24 12V36M16 24H32" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="gradient" x1="0" y1="0" x2="48" y2="48">
-                <stop stop-color="#6366f1"/>
-                <stop offset="1" stop-color="#8b5cf6"/>
-              </linearGradient>
-            </defs>
-          </svg>
+          <img src="logo.svg" alt="Logo" style="width: 70%">
         </div>
-        <h1>Prescription Manager</h1>
         <p>Sign in to manage your prescriptions</p>
       </div>
-      
+
       <form id="loginForm" class="login-form">
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            placeholder="doctor@example.com"
-            required
-          >
+          <input type="email" id="email" name="email" placeholder="doctor@example.com" required>
         </div>
-        
+
         <div class="form-group">
           <label for="password">Password</label>
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            placeholder="Enter your password"
-            required
-          >
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
         </div>
-        
+
         <div id="loginError" class="error-message" style="display: none;"></div>
-        
+
         <button type="submit" class="btn btn-primary" id="loginBtn">
           <span>Sign In</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </button>
       </form>
-      
+
       <div class="login-footer">
         <p>Don't have an account? <a href="#" id="showRegister">Register here</a></p>
       </div>
     </div>
-    
+
     <!-- Register Modal -->
     <div id="registerModal" class="modal" style="display: none;">
       <div class="modal-content">
@@ -85,6 +66,15 @@
             <label for="regPassword">Password</label>
             <input type="password" id="regPassword" placeholder="Min. 6 characters" required>
           </div>
+          <div class="form-group">
+            <label for="regType">Doctor Specialty / Type</label>
+            <input type="text" id="regType" placeholder="e.g., General, Cardiologist, Dentist" required>
+          </div>
+          <div class="form-group">
+            <label for="regMobile">Mobile Number</label>
+            <input type="tel" id="regMobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10"
+              required>
+          </div>
           <div id="registerError" class="error-message" style="display: none;"></div>
           <button type="submit" class="btn btn-primary">Create Account</button>
         </form>
@@ -94,4 +84,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

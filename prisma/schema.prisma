@@ -16,7 +16,7 @@ model Doctor {
   passwordHash  String         @map("password_hash")
   name          String
   type          String         @default("General")
-  mobileNumber  Int         @unique 
+  mobileNumber  String         @unique
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
   prescriptions Prescription[]
@@ -26,9 +26,8 @@ model Doctor {
 
 model Patient {
   id            String         @id @default(cuid())
-  patientId     String         @unique @map("patient_id")
   name          String
-  mobileNumber  Int         @unique
+  mobileNumber  String         @unique
   problem       String
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
@@ -56,7 +55,7 @@ model Prescription {
   patientId  String               @map("patient_id")
   medicineId String               @map("medicine_id")
   notes      String?
-  exersice   String?
+  exercise   String?
   createdAt  DateTime             @default(now()) @map("created_at")
   updatedAt  DateTime             @updatedAt @map("updated_at")
   doctor     Doctor               @relation(fields: [doctorId], references: [id])

@@ -38,23 +38,49 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* Login Page */
@@ -64,7 +90,7 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
-  background: 
+  background:
     radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
     radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
     var(--bg-primary);
@@ -294,7 +320,7 @@ body {
 /* Dashboard */
 .dashboard-page {
   min-height: 100vh;
-  background: 
+  background:
     radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
     var(--bg-primary);
 }
@@ -528,12 +554,12 @@ body {
   color: var(--text-muted);
 }
 
-.timing-checkbox input:checked + .timing-card {
+.timing-checkbox input:checked+.timing-card {
   border-color: var(--accent-primary);
   background: rgba(99, 102, 241, 0.1);
 }
 
-.timing-checkbox input:checked + .timing-card svg {
+.timing-checkbox input:checked+.timing-card svg {
   color: var(--accent-primary);
 }
 
@@ -768,7 +794,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

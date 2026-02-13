@@ -147,11 +147,18 @@ function initLoginPage() {
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const password = document.getElementById('regPassword').value;
+            const type = document.getElementById('regType').value;
+            const mobileNumber = document.getElementById('regMobile').value.trim();
+
+            if (!/^\d{10}$/.test(mobileNumber)) {
+                showError('registerError', 'Please enter a valid 10-digit mobile number');
+                return;
+            }
 
             try {
                 const data = await apiRequest('/auth/register', {
                     method: 'POST',
-                    body: JSON.stringify({ name, email, password })
+                    body: JSON.stringify({ name, email, password, type, mobileNumber })
                 });
 
                 authToken = data.token;
@@ -342,8 +349,10 @@ async function handlePrescriptionSubmit(e) {
     e.preventDefault();
     hideError('formError');
 
-    const patientId = document.getElementById('patientId').value.trim();
+
     const patientName = document.getElementById('patientName').value.trim();
+    const patientMobileStr = document.getElementById('patientMobile').value.trim();
+    const patientProblem = document.getElementById('patientProblem').value.trim();
     const medicineId = document.getElementById('selectedMedicineId').value;
     const notes = document.getElementById('notes').value.trim();
 
@@ -358,8 +367,19 @@ async function handlePrescriptionSubmit(e) {
         .filter(val => val);
 
     // Validation
-    if (!patientId || !patientName) {
-        showError('formError', 'Please enter patient ID and name');
+    if (!patientName) {
+        showError('formError', 'Please enter patient name');
+        return;
+    }
+
+    const patientMobileNumber = patientMobileStr;
+    if (!patientMobileStr || !/^\d{10}$/.test(patientMobileNumber)) {
+        showError('formError', 'Please enter a valid 10-digit patient mobile number');
+        return;
+    }
+
+    if (!patientProblem) {
+        showError('formError', 'Please enter the patient problem / condition');
         return;
     }
 
@@ -383,8 +403,9 @@ async function handlePrescriptionSubmit(e) {
         await apiRequest('/prescriptions', {
             method: 'POST',
             body: JSON.stringify({
-                patientId,
                 patientName,
+                patientMobileNumber,
+                patientProblem,
                 medicineId,
                 timings,
                 notes: notes || undefined
@@ -433,7 +454,7 @@ async function loadPrescriptions() {
         <div class="prescription-header">
           <div>
             <div class="prescription-patient">${p.patient.name}</div>
-            <div class="prescription-patient-id">ID: ${p.patient.patientId}</div>
+            <div class="prescription-patient-id">${p.patient.mobileNumber || ''}</div>
           </div>
           <div class="prescription-date">${formatDate(p.createdAt)}</div>
         </div>

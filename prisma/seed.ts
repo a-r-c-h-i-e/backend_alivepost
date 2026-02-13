@@ -9,17 +9,29 @@ async function main() {
     // Create a test doctor
     const passwordHash = await bcrypt.hash('password123', 10);
 
-    const doctor = await prisma.doctor.upsert({
+    const existingDoctor = await prisma.doctor.findUnique({
         where: { email: 'doctor@test.com' },
-        update: {},
-        create: {
-            email: 'doctor@test.com',
-            passwordHash,
-            mobileNumber: 7651998047,
-            type: 'General',
-            name: 'Dr. John Smith',
-        },
     });
+
+    let doctor;
+    if (existingDoctor) {
+        doctor = await prisma.doctor.update({
+            where: { email: 'doctor@test.com' },
+            data: {
+                passwordHash, // Update password if it changed (optional)
+            },
+        });
+    } else {
+        doctor = await prisma.doctor.create({
+            data: {
+                email: 'doctor@test.com',
+                passwordHash,
+                mobileNumber: '7651998047',
+                type: 'General',
+                name: 'Dr. John Smith',
+            },
+        });
+    }
     console.log('✅ Created test doctor:', doctor.email);
 
     // Create sample medicines

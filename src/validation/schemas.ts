@@ -31,11 +31,8 @@ export const registerSchema = z.object({
         .string()
         .max(100, 'type must be at most 100 characters'),
     mobileNumber: z
-        .number()  // Changed from z.Number() to z.number()
-        .int('Mobile number must be an integer')
-        .refine((val) => val.toString().length === 10, {
-            message: 'Mobile number must be exactly 10 digits'
-        }),
+        .string()
+        .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits'),
 });// Medicine validation schemas
 export const medicineSearchSchema = z.object({
     query: z
@@ -65,10 +62,6 @@ export const medicineCreateSchema = z.object({
 
 // Patient validation schemas
 export const patientSchema = z.object({
-    patientId: z
-        .string()
-        .min(1, 'Patient ID must be at least 1 character')
-        .max(50, 'Patient ID must be at most 50 characters'),
     name: z
         .string()
         .min(2, 'Patient name must be at least 2 characters')
@@ -98,20 +91,13 @@ export const prescriptionTimingSchema = z.object({
 
 // Prescription validation schemas
 export const prescriptionCreateSchema = z.object({
-    patientId: z
-        .string()
-        .min(1, 'Patient ID is required')
-        .max(50, 'Patient ID must be at most 50 characters'),
     patientName: z
         .string()
         .min(2, 'Patient name must be at least 2 characters')
         .max(100, 'Patient name must be at most 100 characters'),
     patientMobileNumber: z
-        .number()
-        .int('Mobile number must be an integer')
-        .refine((val) => val.toString().length === 10, {
-            message: 'Mobile number must be exactly 10 digits'
-        }),
+        .string()
+        .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits'),
     patientProblem: z
         .string()
         .min(1, 'Patient problem/condition is required')

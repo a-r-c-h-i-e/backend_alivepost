@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { loginSchema, registerSchema } from '../validation/schemas';
 import { ZodError } from 'zod';
-import {RegisterInput} from '../validation/schemas'
+import { RegisterInput } from '../validation/schemas'
 const router = Router();
 const prisma = new PrismaClient();
 
@@ -33,11 +33,18 @@ router.post('/login', async (req: Request, res: Response) => {
         const secret = process.env.JWT_SECRET || 'fallback-secret';
         const token = jwt.sign({ doctorId: doctor.id }, secret, { expiresIn: '24h' });
 
-    res.cookie('token', token , {
-  httpOnly: true, // Prevents JavaScript access
-  secure: true,   // Ensures HTTPS
-  sameSite: 'strict' // Protects against CSRF
-});
+        res.status(200).cookie('token', token, {
+            httpOnly: true, // Prevents JavaScript access
+            secure: true,   // Ensures HTTPS
+            sameSite: 'strict' // Protects against CSRF
+        }).json({
+            token,
+            doctor: {
+                id: doctor.id,
+                email: doctor.email,
+                name: doctor.name,
+            },
+        });
     } catch (error) {
         if (error instanceof ZodError) {
             res.status(400).json({ error: 'Validation failed', details: error.errors });
@@ -77,7 +84,7 @@ router.post('/register', async (req: Request, res: Response) => {
         const secret = process.env.JWT_SECRET || 'fallback-secret';
         const token = jwt.sign({ doctorId: doctor.id }, secret, { expiresIn: '24h' });
 
-        res.status(201).json({
+        res.status(201).cookie("token", token).json({
             token,
             doctor: {
                 id: doctor.id,

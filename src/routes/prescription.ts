@@ -12,25 +12,23 @@ const prisma = new PrismaClient();
 router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
         const validatedData = prescriptionCreateSchema.parse(req.body);
-        const { 
-            patientId, 
-            patientName, 
+        const {
+            patientName,
             patientMobileNumber,
             patientProblem,
-            medicineId, 
-            timings, 
-            notes 
+            medicineId,
+            timings,
+            notes
         } = validatedData as PrescriptionCreateInput;
 
         // Find or create patient
         let patient = await prisma.patient.findUnique({
-            where: { patientId },
+            where: { mobileNumber: patientMobileNumber },
         });
 
         if (!patient) {
             patient = await prisma.patient.create({
                 data: {
-                    patientId,
                     name: patientName,
                     mobileNumber: patientMobileNumber,
                     problem: patientProblem,
@@ -149,48 +147,57 @@ router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response) =>
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-router.get("/patient/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const prescriptions = await prisma.prescription.findMany({
-      where: {
-        patientId: id
-      },
-      include: {
-        patient: {
-          select: {
-            id: true,
-            name: true,
-            patientId: true
-          }
-        },
-        medicine: {
-          select: {
-            id: true,
-            name: true,
-            dosage: true,
-            type: true,
-            manufacturer: true
-          }
-        },
-        timings: {
-          select: {
-            id: true,
-            timingType: true,
-            customTime: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+router.get("/patient/:mobileNumber", async (req, res) => {
+    try {
+        const { mobileNumber } = req.params;
 
-    res.json(prescriptions);
-  } catch (error) {
-    console.error('Patient Prescription Error', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+        // Find the patient first to get their ID
+        const patient = await prisma.patient.findUnique({
+            where: { mobileNumber }
+        });
+
+        if (!patient) {
+            res.status(404).json({ error: 'Patient not found' });
+            return;
+        }
+
+        const prescriptions = await prisma.prescription.findMany({
+            where: {
+                patientId: patient.id
+            },
+            include: {
+                patient: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                },
+                medicine: {
+                    select: {
+                        id: true,
+                        name: true,
+                        dosage: true,
+                        type: true,
+                        manufacturer: true
+                    }
+                },
+                timings: {
+                    select: {
+                        id: true,
+                        timingType: true,
+                        customTime: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        res.json(prescriptions);
+    } catch (error) {
+        console.error('Patient Prescription Error', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 export default router;
